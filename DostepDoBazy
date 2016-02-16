@@ -1,0 +1,115 @@
+import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import pl.alx.sklep.exn.BladBazyDanych;
+import pl.alx.sklep.exn.NieznanyTowar;
+import pl.alx.sklep.model.Towar;
+
+public class DostepDoBazy {
+	public static final String dbUrl = "jdbc:postgresql://localhost:5432/sklep";
+
+	private Connection polaczenie;
+
+	public void polacz() throws BladBazyDanych {
+		try {
+			Class.forName("org.postgresql.Driver");
+			polaczenie = DriverManager.getConnection(dbUrl, "sklep",
+					"sklep");
+		} catch (SQLException e) {
+			throw new BladBazyDanych("Blad podczas polaczenia", e);
+		} catch (ClassNotFoundException e) {
+			throw new BladBazyDanych("Brak klasy", e);
+		}
+	}
+
+	public void zamknij() throws BladBazyDanych {
+		if (polaczenie != null) {
+			try {
+				polaczenie.close();
+				polaczenie = null;
+			} catch (SQLException e) {
+				throw new BladBazyDanych("Blad podczas rozlaczania", e);
+			}
+		}
+	}
+
+	public List<Towar> wszystkieTowary() throws BladBazyDanych {
+		final String sql = "SELECT nazwa, cena_brutto, vat, opis"
+				+ " FROM towary ORDER BY nazwa";
+
+		try (Statement st = polaczenie.createStatement();
+				ResultSet rs = st.executeQuery(sql)) {
+
+			List<Towar> lista = new LinkedList<>();
+			while (rs.next()) {
+				Towar t = towarZWiersza(rs);
+				lista.add(t);
+			}
+			return lista;
+		} catch (SQLException e) {
+			throw new BladBazyDanych("Blad odczytu towarow", e);
+		}
+	}
+
+	public Towar wczytajTowar(long idTowaru) throws NieznanyTowar, BladBazyDanych {
+		final String sql = "SELECT nazwa, cena_brutto, vat, opis"
+				+ " FROM towary WHERE id_towaru = ?";
+
+		try (PreparedStatement st = polaczenie.prepareStatement(sql)) {
+			st.setLong(1, idTowaru);
+			try (ResultSet rs = st.executeQuery()) {
+				if (rs.next()) {
+					Towar t = towarZWiersza(rs);
+					return t;
+				} else {
+					throw new NieznanyTowar("Brak towaru o id=" + idTowaru);
+				}
+			}
+		} catch (SQLException e) {
+			throw new BladBazyDanych("Blad odczytu towarow", e);
+		}
+	}
+
+	public void zapiszTowar(Towar towar) throws BladBazyDanych {
+		final String sqlU = "UPDATE towary SET "
+				+ "nazwa = ? , cena_netto = ? , vat = ? , opis = ? "
+				+ "WHERE id_towaru = ?";
+		
+		try (PreparedStatement st = polaczenie.prepareStatement(sqlU)) {
+			st.setString(1, towar.getNazwa());
+			st.setBigDecimal(2, towar.getCenaNettoBD());
+			st.setBigDecimal(3, towar.getVatBD());
+			st.setString(4, towar.getOpis());
+			st.setLong(5, towar.getId());
+			
+			int ile = st.executeUpdate();
+			
+			if(ile == 0) {
+				//TODO nalezaloby zrobic INSERT
+			}
+			
+		} catch (SQLException e) {
+			throw new BladBazyDanych("Blad zapisu towaru", e);
+		}
+	}
+
+	private Towar towarZWiersza(ResultSet rs) throws SQLException {
+		//int id = rs.getInt(1);
+		String nazwa = rs.getString(1);
+		BigDecimal cena = rs.getBigDecimal(2);
+		BigDecimal vat = rs.getBigDecimal("vat");
+		String opis = rs.getString(4);
+
+		Towar t = new Towar(1, nazwa, cena, vat, opis);
+		return t;
+	}
+
+}
