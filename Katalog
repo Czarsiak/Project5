@@ -1,0 +1,18 @@
+import java.util.List;
+
+import sklep.baza.DostepDoBazy;
+import sklep.exn.BladBazyDanych;
+import sklep.model.Towar;
+
+public class Katalog {
+
+	public List<Towar> getTowary() throws BladBazyDanych {
+		DostepDoBazy ddb = new DostepDoBazy();
+		ddb.polacz();
+		List<Towar> towary = ddb.wszystkieTowary();
+		ddb.zamknij();
+		return towary;
+	}
+	
+	
+}
