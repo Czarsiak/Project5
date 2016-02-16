@@ -1,0 +1,19 @@
+import java.util.List;
+
+import pl.alx.sklep.exn.BladBazyDanych;
+import pl.alx.sklep.model.Towar;
+
+public class RunWszystkieTowary {
+
+	public static void main(String[] args) {
+		try {
+			DostepDoBazy ddb = new DostepDoBazy();
+			ddb.polacz();
+			List<Towar> towary = ddb.wszystkieTowary();
+			ddb.zamknij();
+			System.out.println(towary);
+		} catch (BladBazyDanych e) {
+			e.printStackTrace();
+		}
+	}
+}
