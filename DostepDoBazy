@@ -9,9 +9,9 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import pl.alx.sklep.exn.BladBazyDanych;
-import pl.alx.sklep.exn.NieznanyTowar;
-import pl.alx.sklep.model.Towar;
+import sklep.exn.BladBazyDanych;
+import sklep.exn.NieznanyTowar;
+import sklep.model.Towar;
 
 public class DostepDoBazy {
 	public static final String dbUrl = "jdbc:postgresql://localhost:5432/sklep";
