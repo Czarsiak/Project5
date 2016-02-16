@@ -1,0 +1,39 @@
+import sklep.baza.DostepDoBazy;
+import sklep.exn.BladBazyDanych;
+import sklep.exn.NieznanyTowar;
+import sklep.model.Towar;
+
+public class TowarDAO {
+	private long idTowaru;
+	private Towar towar;
+	
+	public long getIdTowaru() {
+		return idTowaru;
+	}
+	public void setIdTowaru(long idTowaru) {
+		this.idTowaru = idTowaru;
+	}
+	public Towar getTowar() {
+		return towar;
+	}
+	public void setTowar(Towar towar) {
+		this.towar = towar;
+	}
+	
+	public void wczytaj() throws BladBazyDanych, NieznanyTowar {
+		DostepDoBazy ddb = new DostepDoBazy();
+		ddb.polacz();
+		towar = ddb.wczytajTowar(idTowaru);
+		ddb.zamknij();
+	}
+	
+	public void zapisz() throws BladBazyDanych {
+		DostepDoBazy ddb = new DostepDoBazy();
+		ddb.polacz();
+		ddb.zapiszTowar(towar);
+		ddb.zamknij();
+		
+	}
+}
+
+
