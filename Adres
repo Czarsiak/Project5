@@ -1,0 +1,68 @@
+import java.util.Objects;
+
+public class Adres {
+    private String ulicaINumer, kodPocztowy, miasto;
+
+    public Adres() {
+    }
+
+    public Adres(String ulicaINumer, String kodPocztowy, String miasto) {
+        this.ulicaINumer = ulicaINumer;
+        this.kodPocztowy = kodPocztowy;
+        this.miasto = miasto;
+    }
+
+    public String getUlicaINumer() {
+        return ulicaINumer;
+    }
+
+    public void setUlicaINumer(String ulicaINumer) {
+        this.ulicaINumer = ulicaINumer;
+    }
+
+    public String getKodPocztowy() {
+        return kodPocztowy;
+    }
+
+    public void setKodPocztowy(String kodPocztowy) {
+        this.kodPocztowy = kodPocztowy;
+    }
+
+    public String getMiasto() {
+        return miasto;
+    }
+
+    public void setMiasto(String miasto) {
+        this.miasto = miasto;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.ulicaINumer);
+        hash = 47 * hash + Objects.hashCode(this.kodPocztowy);
+        hash = 47 * hash + Objects.hashCode(this.miasto);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Adres other = (Adres) obj;
+        if (!Objects.equals(this.ulicaINumer, other.ulicaINumer))
+            return false;
+        if (!Objects.equals(this.kodPocztowy, other.kodPocztowy))
+            return false;
+        if (!Objects.equals(this.miasto, other.miasto))
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return ulicaINumer + ", " + kodPocztowy + " " + miasto;
+    }
+}
