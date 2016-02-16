@@ -1,0 +1,17 @@
+public class NieznanyTowar extends BladAplikacji {
+
+	public NieznanyTowar() {
+	}
+
+	public NieznanyTowar(String message) {
+		super(message);
+	}
+
+	public NieznanyTowar(Throwable cause) {
+		super(cause);
+	}
+
+	public NieznanyTowar(String message, Throwable cause) {
+		super(message, cause);
+	}
+}
