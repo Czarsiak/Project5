@@ -1,0 +1,120 @@
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Objects;
+
+public class Towar {
+    private long id;
+    private String nazwa;
+    private BigDecimal cenaNetto, vat;
+    private String opis;
+
+    // aby spelnic wymagania JavaBean
+    public Towar() {
+    }
+
+    // dla wygody tworzenia
+    public Towar(long id, String nazwa, BigDecimal cenaNetto, BigDecimal vat, String opis) {
+        this.id = id;
+        this.nazwa = nazwa;
+        this.cenaNetto = cenaNetto;
+        this.vat = vat;
+        this.opis = opis;
+    }
+    
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getNazwa() {
+        return nazwa;
+    }
+
+    public void setNazwa(String nazwa) {
+        this.nazwa = nazwa;
+    }
+
+    public String getCenaNetto() {
+        return cenaNetto.toString();
+    }
+
+    public BigDecimal getCenaNettoBD() {
+        return cenaNetto;
+    }
+
+    public void setCenaNettoBD(BigDecimal cenaNetto) {
+        this.cenaNetto = cenaNetto;
+    }
+
+    public void setCenaNetto(String cenaStr) {
+        this.setCenaNettoBD(new BigDecimal(cenaStr));
+    }
+
+    public String getVat() {
+        return vat.toString();
+    }
+
+    public BigDecimal getVatBD() {
+        return vat;
+    }
+
+    public void setVatBD(BigDecimal vat) {
+        this.vat = vat;
+    }
+
+    public void setVat(String vatStr) {
+        this.setVatBD(new BigDecimal(vatStr));
+    }
+
+    public String getOpis() {
+        return opis;
+    }
+
+    public void setOpis(String opis) {
+        this.opis = opis;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 61 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 61 * hash + Objects.hashCode(this.nazwa);
+        hash = 61 * hash + Objects.hashCode(this.cenaNetto);
+        hash = 61 * hash + Objects.hashCode(this.vat);
+        hash = 61 * hash + Objects.hashCode(this.opis);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        final Towar other = (Towar) obj;
+        if (this.id != other.id)
+            return false;
+        if (!Objects.equals(this.nazwa, other.nazwa))
+            return false;
+        if (!Objects.equals(this.cenaNetto, other.cenaNetto))
+            return false;
+        if (!Objects.equals(this.vat, other.vat))
+            return false;
+        if (!Objects.equals(this.opis, other.opis))
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "T("+id+"): "+nazwa+", "+cenaNetto;
+    }
+    
+    public BigDecimal getCenaBrutto() {
+	// cenaNetto * (1 + vat)
+	return cenaNetto.multiply(BigDecimal.ONE.add(vat)).setScale(2, RoundingMode.HALF_UP);
+    }
+}
