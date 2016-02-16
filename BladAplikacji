@@ -1,0 +1,18 @@
+public class BladAplikacji extends Exception {
+
+	public BladAplikacji() {
+	}
+
+	public BladAplikacji(String message) {
+		super(message);
+	}
+
+	public BladAplikacji(Throwable cause) {
+		super(cause);
+	}
+
+	public BladAplikacji(String message, Throwable cause) {
+		super(message, cause);
+	}
+
+}
